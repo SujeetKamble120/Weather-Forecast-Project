@@ -47,7 +47,7 @@ For autocomplete search
 
 ![App Screenshot](https://i.postimg.cc/bJ4sjNjq/Screenshot-7.png)
 
-![App Screenshot](https://i.postimg.cc/59FXSvwy/Screenshot-9.png)
+[![Screenshot-9.png](https://i.postimg.cc/59FXSvwy/Screenshot-9.png)](https://postimg.cc/HjdWprv1)
 
 
 
