@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather forecast</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/swiper@8/swiper-bundle.min.css"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+    <!-- <script
+      type="text/javascript"
+      src="https://www.gstatic.com/charts/loader.js"
+    ></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.8.0/dist/chart.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+      integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+      crossorigin=""
+    />
+    <script
+      src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+      integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+      crossorigin=""
+    ></script>
+  </head>
+  <body>
+    <div class="preload">
+      <img src="./img/Storm.gif" alt="" />
+      <h3>Looking outside for you... 1 sec</h3>
+    </div>
+    <div class="back-button">
+      <ion-icon class="back-button-icon" name="arrow-back-outline"></ion-icon>
+    </div>
+    <div class="main-container">
+      <!-- Menu class -->
+      <div class="menu">
+        <div class="logo-name">
+          <ion-icon class="logo-icon" name="thunderstorm"></ion-icon>
+          <h2 class="app-name">Hurricane</h2>
+        </div>
+        <ul class="menu-items">
+          <li class="list-menu-item">
+            <ion-icon class="list-icon" name="grid-outline"></ion-icon>
+            <p class="list-text">Dashboard</p>
+          </li>
+          <li class="list-menu-item map-button">
+            <ion-icon class="list-icon" name="map-outline"></ion-icon>
+            <p class="list-text">Map</p>
+          </li>
+          <li class="list-menu-item calendar-button">
+            <ion-icon class="list-icon" name="calendar-outline"></ion-icon>
+            <p class="list-text">Calendar</p>
+          </li>
+          <li class="list-menu-item">
+            <ion-icon class="list-icon" name="contrast-outline"></ion-icon>
+            <p class="list-text">Theme</p>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Display class -->
+      <div class="display">
+        <!-- Search box -->
+        <div class="search-bar">
+          <ion-icon class="search-icon" name="search-outline"></ion-icon>
+          <div class="search-wrapper">
+            <input class="search" type="search" placeholder="Search here..." />
+            <ul class="suggestions"></ul>
+          </div>
+        </div>
+
+        <!-- Info-box -->
+        <div class="info-card">
+          <div class="city-temperature">
+            <div class="city-flex">
+              <ion-icon
+                class="location-icon"
+                name="location-outline"
+              ></ion-icon>
+              <p class="city-name"></p>
+              <div class="month-time">
+                <p class="time"></p>
+                <p class="date"></p>
+              </div>
+            </div>
+
+            <div class="temp-flex"></div>
+
+            <div class="humidity-flex">
+              <div class="weather-statistics">
+                <svg
+                  class="weather-statistics-icon"
+                  style="vertical-align: middle; overflow: hidden"
+                  viewBox="0 0 1024 1024"
+                  version="1.1"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M580.266667 614.4H34.133333v68.266667h546.133334c56.32
+                      0 102.4 46.08 102.4 102.4s-46.08 102.4-102.4 102.4-102.4-46.08-102.4-102.4h-68.266667c0
+                       94.208 76.458667 170.666667 170.666667 170.666666s170.666667-76.458667
+                       170.666666-170.666666-76.458667-170.666667-170.666666-170.666667zM546.133333
+                       256C546.133333 171.349333 477.184 102.4 392.533333 102.4S238.933333 171.349333
+                       238.933333 256h68.266667a85.333333 85.333333 0 0 1 170.666667 0 85.333333
+                       85.333333 0 0 1-85.333334 85.333333H34.133333v68.266667h358.4c84.650667
+                       0 153.6-68.949333 153.6-153.6zM798.037333 136.533333c-112.981333
+                       0-204.8 91.818667-204.8 204.8h68.266667c0-75.434667 61.098667-136.533333
+                       136.533333-136.533333s136.533333 61.098667 136.533334 136.533333-61.098667
+                       136.533333-136.533334 136.533334H34.133333v68.266666h763.904c112.981333 0 204.8-91.818667 204.8-204.8s-92.16-204.8-204.8-204.8z"
+                  />
+                </svg>
+                <p class="weather-statistics-value wind-speed"></p>
+              </div>
+              <div class="weather-statistics">
+                <svg
+                  class="weather-statistics-icon"
+                  style="
+                    vertical-align: middle;
+                    fill: currentColor;
+                    overflow: hidden;
+                  "
+                  viewBox="0 0 1024 1024"
+                  version="1.1"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M334.915327 733.720777c-5.27719 0-10.313903-3.091408-12.539594-8.262174-1.705851-3.970428-2.332115-6.901177-3.385097-11.779278-0.49221-2.291183-1.1328-5.27719-2.104941-9.380648-1.719154-7.322779 2.824325-14.678304 10.153244-16.410762 7.275707-1.65264 14.671141 2.825348 16.416901 10.154267 1.01205 4.337795 1.692548 7.482415 2.212388 9.907651 0.905626 4.210905 1.146103 5.250584 1.785669 6.715959 2.971681 6.928806-0.226151 14.950504-7.141654 17.935488C338.552158 733.347271 336.727603 733.720777 334.915327 733.720777z"
+                  />
+                  <path
+                    d="M491.102552 860.978113c-0.613984 0-1.225921-0.025583-1.852184-0.106424-60.150962-8.207939-113.319905-42.37511-145.886625-93.704149-4.037966-6.370081-2.145873-14.791891 4.224208-18.84316 6.342452-4.02364 14.777565-2.158153 18.828834 4.238534 28.237111 44.534286 74.356498 74.142627 126.512369 81.257675 7.476275 1.013073 12.698207 7.889691 11.686157 15.35164C503.682056 856.022241 497.817488 860.978113 491.102552 860.978113z"
+                  />
+                  <path
+                    d="M512.30341 957.589474c-161.557536 0-293.000194-131.442658-293.000194-293.007357 0-104.245226 151.577231-443.271686 190.30016-520.492418 25.851784-51.54291 61.84351-79.925331 101.367689-79.925331 22.799262 0 66.293869 10.367115 101.527324 79.805604 40.827871 80.486102 192.805214 415.235143 192.805214 520.612145C805.303604 826.145793 673.860946 957.589474 512.30341 957.589474zM510.971066 118.744451c-17.283642 0-36.938284 18.614963-52.569286 49.810453-47.425126 94.544283-184.517457 411.94419-184.517457 496.027214 0 131.475404 106.949824 238.426251 238.419088 238.426251 131.470287 0 238.419088-106.950847 238.419088-238.426251 0-82.790588-132.655276-388.984269-186.889481-495.919766C547.736411 136.933719 528.467555 118.744451 510.971066 118.744451z"
+                  />
+                </svg>
+
+                <p class="weather-statistics-value humidity"></p>
+              </div>
+              <div class="weather-statistics">
+                <svg
+                  class="weather-statistics-icon modify-icon-pressure"
+                  style="
+                    vertical-align: middle;
+                    fill: currentColor;
+                    overflow: hidden;
+                  "
+                  viewBox="0 0 1296 1024"
+                  version="1.1"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M470.29427317 586.87598978a35.08766599 35.08766599 0 0 1-35.08766599-35.08766596V230.92258155a35.08766599 35.08766599 0 0 1 70.17533257 0V551.78832382a35.08766599 35.08766599 0 0 1-35.08766659 35.08766597zM610.67783243 665.02280113a35.08766599 35.08766599 0 0 1-35.08766598-35.087666V299.21195178a35.08766599 35.08766599 0 0 1 70.17533255 0v330.72318335a35.08766599 35.08766599 0 0 1-35.08766658 35.08766599zM751.05042698 586.47028857a35.08766599 35.08766599 0 0 1-35.08766599-35.08766597V230.57170512a35.08766599 35.08766599 0 1 1 70.17533197 1e-8v320.81091747a35.08766599 35.08766599 0 0 1-35.08766598 35.08766598z"
+                  />
+                  <path
+                    d="M841.12704497 675.61489043a124.9998108 124.9998108 0 0 1-124.87919708-124.86823175 35.08766599 35.08766599 0 0 1 70.17533254 1e-8 54.70386453 54.70386453 0 1 0 109.39676435 0 35.08766599 35.08766599 0 0 1 70.17533196 0 124.9998108 124.9998108 0 0 1-124.86823176 124.86823174zM380.51370737 675.61489043A124.9998108 124.9998108 0 0 1 255.6345109 550.74665868a35.08766599 35.08766599 0 0 1 70.17533195 0 54.70386453 54.70386453 0 1 0 109.39676434 0 35.08766599 35.08766599 0 0 1 70.17533256 0 124.9998108 124.9998108 0 0 1-124.86823238 124.86823175zM961.62028352 806.46995556H258.04678756a35.08766599 35.08766599 0 0 1 0-70.17533255h703.57349595a35.08766599 35.08766599 0 0 1 0 70.17533255z"
+                  />
+                </svg>
+
+                <p class="weather-statistics-value pressure"></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="temperature-graph">
+            <div class="chart-wrapper">
+              <h2 class="app-name margin-bottom-sm">Temperature</h2>
+              <canvas id="line_chart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Other info box -->
+        <div class="individual-card">
+          <div class="weather-vitals">
+            <div class="left">
+              <p class="weather-vitals-name">Humidity</p>
+              <p class="weather-vitals-value humidity"></p>
+            </div>
+            <div class="right">
+              <?xml version="1.0" ?><svg
+                data-name="Layer 1"
+                class="weather-vitals-icon"
+                id="Layer_1"
+                viewBox="0 0 64 64"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <defs>
+                  <style>
+                    .fill-blue {
+                      fill: #0baeff;
+                    }
+                  </style>
+                </defs>
+                <title />
+                <path
+                  class="fill-blue"
+                  d="M49,38a17.5,17.5,0,0,1-35,0C14,22.7,28.22,8.48,31.5,8.48S49,22.7,49,38Z"
+                />
+              </svg>
+            </div>
+          </div>
+          <div class="weather-vitals">
+            <div class="left">
+              <p class="weather-vitals-name">Rain chance</p>
+              <p class="weather-vitals-value rain-chance"></p>
+            </div>
+            <div class="right">
+              <?xml version="1.0" ?><svg
+                enable-background="new 0 0 64 64"
+                class="weather-vitals-icon"
+                id="Слой_1"
+                version="1.1"
+                viewBox="0 0 64 64"
+                xml:space="preserve"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+              >
+                <g id="row_1">
+                  <g id="umbrella">
+                    <g>
+                      <path
+                        d="M57.8,35.3c-0.5,0-0.9-0.4-1-0.9c-0.1-0.7-0.2-1.4-0.3-2.1c-0.1-0.5,0.3-1.1,0.9-1.1     c0.5-0.1,1.1,0.3,1.1,0.9c0.1,0.7,0.2,1.4,0.3,2.2C58.9,34.8,58.5,35.3,57.8,35.3C57.9,35.3,57.8,35.3,57.8,35.3z"
+                        fill="#455A64"
+                      />
+                      <path
+                        d="M6.2,35.3C6.2,35.3,6.1,35.3,6.2,35.3c-0.6-0.1-1-0.5-1-1.1c0.1-0.7,0.2-1.5,0.3-2.2     c0.1-0.5,0.6-0.9,1.1-0.9c0.5,0.1,0.9,0.6,0.9,1.1c-0.1,0.7-0.2,1.4-0.3,2.1C7.1,34.9,6.7,35.3,6.2,35.3z"
+                        fill="#455A64"
+                      />
+                      <path
+                        d="M20,36.6C20,36.6,20,36.6,20,36.6c-0.6,0-1-0.5-1-1c0-0.6,0-1.1,0-1.7l0-0.3c0-0.6,0.4-1,1-1     c0.6,0,1,0.5,1,1l0,0.3c0,0.5,0,1.1,0,1.6C21,36.2,20.6,36.6,20,36.6z"
+                        fill="#455A64"
+                      />
+                      <path
+                        d="M44,36.6c-0.5,0-1-0.4-1-1c0-0.5,0-1.1,0-1.6l0-0.3c0-0.6,0.4-1,1-1c0.6,0,1,0.4,1,1l0,0.2     c0,0.6,0,1.1,0,1.7C45,36.2,44.5,36.6,44,36.6C44,36.6,44,36.6,44,36.6z"
+                        fill="#455A64"
+                      />
+                    </g>
+                    <rect fill="#B0BEC5" height="22" width="2" x="31" y="30" />
+                    <path
+                      d="M27.6,54.6c0.3,0.3,0.5,0.8,0.4,1.3c0,0.3,0,0.6,0.3,0.9c0.4,0.4,1,0.4,1.4,0c0.2-0.2,0.3-0.4,0.3-0.7    c0-1.1,0-3.6,0-5c0-0.6,0.4-1,1-1h2c0.6,0,1,0.4,1,1v5c0,1.3-0.5,2.6-1.5,3.6c-1,1-2.3,1.5-3.5,1.5s-2.6-0.5-3.5-1.5    c-1.4-1.4-1.8-3.5-1.1-5.3c0.4-1,1.7-1.3,2.5-0.5L27.6,54.6z"
+                      fill="#2196F3"
+                    />
+                    <path
+                      d="M32,5.6c3.6,0.3,7.1,1,10.4,2.1c4.1,1.4,7.7,4.1,10,7.8c3.1,4.9,5.2,10.5,6.1,16.6    c-4.9,0.2-9.8,0.7-14.6,1.6c-0.2-6.9-1.4-13.7-3.5-20.3c-0.8-2.4-2.4-4.4-4.5-5.6C34.6,7,33.3,6.3,32,5.6z"
+                      fill="#039BE5"
+                    />
+                    <path
+                      d="M31.9,5.6c-3.6,0.3-7.1,1-10.4,2.1c-4.1,1.4-7.7,4.1-10,7.8C8.4,20.4,6.3,26,5.4,32.1    c4.9,0.2,9.8,0.7,14.6,1.6c0.2-6.9,1.4-13.7,3.5-20.4c0.8-2.4,2.4-4.4,4.5-5.6C29.3,6.9,30.6,6.3,31.9,5.6z"
+                      fill="#4FC3F7"
+                    />
+                    <path
+                      d="M43.9,33.6c-0.2-6.9-1.4-13.7-3.5-20.3c-0.8-2.4-2.4-4.4-4.5-5.6c-1.3-0.7-2.7-1.4-4-2.1    c-1.3,0.6-2.6,1.3-3.9,2c-2.2,1.2-3.8,3.2-4.5,5.6c-2.1,6.6-3.2,13.5-3.5,20.4C27.8,32.7,36.2,32.7,43.9,33.6z"
+                      fill="#29B6F6"
+                    />
+                    <path
+                      d="M33.5,5.7c0,0.6-3,0.6-3,0l0.4-2.4c0.1-0.5,0.5-0.8,1-0.8h0.3c0.5,0,0.9,0.4,1,0.8L33.5,5.7z"
+                      fill="#78909C"
+                    />
+                  </g>
+                </g>
+              </svg>
+            </div>
+          </div>
+          <div class="weather-vitals">
+            <div class="left">
+              <p class="weather-vitals-name">Sunset</p>
+              <p class="weather-vitals-value sunset"></p>
+            </div>
+            <div class="right">
+              <?xml version="1.0" ?><!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
+              <svg
+                class="weather-vitals-icon"
+                enable-background="new 0 0 32 32"
+                version="1.1"
+                viewBox="0 0 32 32"
+                xml:space="preserve"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+              >
+                <g id="Layer_2" />
+                <g id="Layer_3" />
+                <g id="Layer_4" />
+                <g id="Layer_5" />
+                <g id="Layer_6" />
+                <g id="Layer_7" />
+                <g id="Layer_8" />
+                <g id="Layer_9" />
+                <g id="Layer_10" />
+                <g id="Layer_11" />
+                <g id="Layer_12" />
+                <g id="Layer_13">
+                  <g>
+                    <path
+                      d="M16,10c-0.6,0-1-0.4-1-1V6c0-0.6,0.4-1,1-1s1,0.4,1,1v3C17,9.6,16.6,10,16,10z"
+                      fill="#FE5723"
+                    />
+                  </g>
+                  <g>
+                    <path
+                      d="M7,12c-0.3,0-0.5-0.1-0.7-0.3l-2-2c-0.4-0.4-0.4-1,0-1.4s1-0.4,1.4,0l2,2c0.4,0.4,0.4,1,0,1.4    C7.5,11.9,7.3,12,7,12z"
+                      fill="#FE5723"
+                    />
+                  </g>
+                  <g>
+                    <path
+                      d="M25,12c-0.3,0-0.5-0.1-0.7-0.3c-0.4-0.4-0.4-1,0-1.4l2-2c0.4-0.4,1-0.4,1.4,0s0.4,1,0,1.4l-2,2    C25.5,11.9,25.3,12,25,12z"
+                      fill="#FE5723"
+                    />
+                  </g>
+                  <g>
+                    <path
+                      d="M27,22c0,1.4-0.3,2.7-0.7,4c-0.1,0.3-0.3,0.5-0.6,0.6C24.9,26.8,24,27,23,27c-2,0-3.1-0.6-4-1.1    c-0.8-0.5-1.5-0.9-3-0.9s-2.2,0.4-3,0.9c-0.9,0.5-2,1.1-4,1.1c-1,0-1.9-0.2-2.7-0.5C6,26.4,5.8,26.2,5.7,26C5.3,24.7,5,23.4,5,22    c0-6.1,4.9-11,11-11S27,15.9,27,22z"
+                      fill="#FFC10A"
+                    />
+                  </g>
+                  <g>
+                    <path
+                      d="M23,27c-2,0-3.1-0.6-4-1.1c-0.8-0.5-1.5-0.9-3-0.9c-1.5,0-2.2,0.4-3,0.9c-0.9,0.5-2,1.1-4,1.1    c-1,0-1.9-0.2-2.7-0.5c-0.5-0.2-0.9-0.4-1.3-0.6C4.2,25.4,3.5,25,2,25c-0.6,0-1-0.4-1-1s0.4-1,1-1c2,0,3.1,0.6,4,1.1    c0.3,0.2,0.7,0.4,1,0.5C7.6,24.9,8.2,25,9,25c1.5,0,2.2-0.4,3-0.9c0.9-0.5,2-1.1,4-1.1c2,0,3.1,0.6,4,1.1c0.8,0.5,1.5,0.9,3,0.9    c0.8,0,1.4-0.1,2-0.3c0.4-0.1,0.7-0.3,1-0.5c0.9-0.5,2-1.1,4-1.1c0.6,0,1,0.4,1,1s-0.4,1-1,1c-1.5,0-2.2,0.4-3,0.9    c-0.4,0.2-0.8,0.5-1.3,0.7C24.9,26.8,24,27,23,27z"
+                      fill="#2197F3"
+                    />
+                  </g>
+                </g>
+                <g id="Layer_14" />
+                <g id="Layer_15" />
+                <g id="Layer_16" />
+                <g id="Layer_17" />
+                <g id="Layer_18" />
+                <g id="Layer_19" />
+                <g id="Layer_20" />
+                <g id="Layer_21" />
+                <g id="Layer_22" />
+                <g id="Layer_23" />
+                <g id="Layer_24" />
+                <g id="Layer_25" />
+                <g id="Wearher" />
+              </svg>
+            </div>
+          </div>
+          <div class="weather-vitals">
+            <div class="left">
+              <p class="weather-vitals-name">Feels Like</p>
+              <p class="weather-vitals-value feels-like"></p>
+            </div>
+            <div class="right">
+              <?xml version="1.0" ?>
+              <svg
+                class="weather-vitals-icon"
+                id="sun"
+                viewBox="0 0 48 48"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <defs>
+                  <style>
+                    .vi-primary {
+                      fill: #ff6e6e;
+                      fill-rule: evenodd;
+                    }
+
+                    .vi-accent {
+                      fill: #0c0058;
+                      stroke: #fff;
+                      stroke-linecap: round;
+                      stroke-width: 0;
+                    }
+                  </style>
+                </defs>
+                <path
+                  class="vi-primary"
+                  d="M36.021,11.979L36,19l5,5-5,5,0.021,7.021L29,36l-5,5-5-5-7.021.021L12,29,7,24l5-5-0.021-7.021L19,12l5-5,5,5Z"
+                />
+                <circle class="vi-accent" cx="24" cy="24" r="9" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div id="map"></div>
+      </div>
+
+      <!-- Forecast class -->
+      <div class="forecast" data-carousel>
+        <ul data-slides>
+          <li class="slide" data-active>
+            <div class="carousel-title">
+              <h2 class="app-name">Today's details</h2>
+              <button class="btn btn--left" data-slide-button="prev">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="btn-icon"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 19l-7-7 7-7"
+                  />
+                </svg>
+              </button>
+              <button class="btn btn--right" data-slide-button="next">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="btn-icon"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            <!-- Temperature swiper -->
+            <h3 class="tertiary-subheading">Temperature</h3>
+            <div class="swiper-temporary">
+              <div class="swiper-wrapper" id="temperature-slider"></div>
+              <!-- Add Pagination -->
+              <div class="swiper-pagination"></div>
+            </div>
+            <div class="temporary-next"></div>
+            <div class="temporary-prev"></div>
+
+            <!--Humidity swiper -->
+            <h3 class="tertiary-subheading">Humidity</h3>
+            <div class="swiper-temporary">
+              <div class="swiper-wrapper" id="humidity-slider"></div>
+              <!-- Add Pagination -->
+              <div class="swiper-pagination"></div>
+            </div>
+            <div class="temporary-next"></div>
+            <div class="temporary-prev"></div>
+
+            <!-- Rain chance swiper -->
+            <h3 class="tertiary-subheading">Rain chance</h3>
+            <div class="swiper-temporary">
+              <div class="swiper-wrapper" id="rainChance-slider"></div>
+              <!-- Add Pagination -->
+              <div class="swiper-pagination"></div>
+            </div>
+            <div class="temporary-next"></div>
+            <div class="temporary-prev"></div>
+          </li>
+          <li class="slide">
+            <div class="carousel-title">
+              <h2 class="app-name">This week</h2>
+              <button class="btn btn--left" data-slide-button="prev">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="btn-icon"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 19l-7-7 7-7"
+                  />
+                </svg>
+              </button>
+              <button class="btn btn--right" data-slide-button="next">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="btn-icon"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            <!-- Temperature swiper -->
+            <h3 class="tertiary-subheading">Temperature</h3>
+            <div class="swiper-temporary">
+              <div class="swiper-wrapper" id="temperature-slider-weekly"></div>
+              <!-- Add Pagination -->
+              <div class="swiper-pagination"></div>
+            </div>
+            <div class="temporary-next"></div>
+            <div class="temporary-prev"></div>
+
+            <!--Humidity swiper -->
+            <h3 class="tertiary-subheading">Humidity</h3>
+            <div class="swiper-temporary">
+              <div class="swiper-wrapper" id="humidity-slider-weekly"></div>
+              <!-- Add Pagination -->
+              <div class="swiper-pagination"></div>
+            </div>
+            <div class="temporary-next"></div>
+            <div class="temporary-prev"></div>
+
+            <!-- Rain chance swiper -->
+            <h3 class="tertiary-subheading">Rain chance</h3>
+            <div class="swiper-temporary">
+              <div class="swiper-wrapper" id="rainChance-slider-weekly"></div>
+              <!-- Add Pagination -->
+              <div class="swiper-pagination"></div>
+            </div>
+            <div class="temporary-next"></div>
+            <div class="temporary-prev"></div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
+    ></script>
+    <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+    <script defer type="text/javascript" src="./scripts/config.js"></script>
+    <script defer type="text/javascript" src="./scripts/index.js"></script>
+  </body>
+</html>
