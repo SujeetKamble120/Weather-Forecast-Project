@@ -45,6 +45,8 @@ For autocomplete search
 
 ![App Screenshot](https://i.postimg.cc/7Y8fs6VV/Screenshot-6.png)
 
+![App Screenshot](https://i.postimg.cc/YqBqMsTf/InfoCard.png)
+
 ![App Screenshot](https://i.postimg.cc/pXPYcRRg/Screenshot-11.png)
 
 ![App Screenshot](https://i.postimg.cc/bJ4sjNjq/Screenshot-7.png)
